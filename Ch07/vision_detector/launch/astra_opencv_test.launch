@@ -1,0 +1,12 @@
+<launch>
+
+    <!-- 启动相机节点  -->
+    <node name="libuvc_camera" pkg="libuvc_camera" type="camera_node" />
+
+    <!-- 启动opencv测试节点  -->
+    <node pkg="vision_detector" name="astra_cv_bridge_test" type="astra_cv_bridge_test.py" output="screen" />
+
+    <!-- 启动订阅cv_bridge_image话题  -->
+    <node name="rqt_image_view" pkg="rqt_image_view" type="rqt_image_view" args="/cv_bridge_image"/>
+
+</launch>

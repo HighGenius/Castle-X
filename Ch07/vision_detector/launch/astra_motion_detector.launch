@@ -1,0 +1,18 @@
+<launch>
+
+    <!-- 启动相机节点  -->
+    <node name="libuvc_camera" pkg="libuvc_camera" type="camera_node" />
+
+    <!-- 启动物体跟踪  -->
+    <node pkg="vision_detector" name="astra_motion_detector" type="astra_motion_detector.py" output="screen">
+        <remap from="input_rgb_image" to="/image_raw" />
+        <rosparam>
+            minArea: 500
+            threshold: 25
+        </rosparam>
+    </node>
+
+    <!-- 启动订阅cv_bridge_image话题  -->
+    <node name="rqt_image_view" pkg="rqt_image_view" type="rqt_image_view" args="/cv_bridge_image"/>
+
+</launch>

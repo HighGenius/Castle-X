@@ -1,0 +1,32 @@
+<launch>
+
+    <!-- 启动相机节点  -->
+    <node name="libuvc_camera" pkg="libuvc_camera" type="camera_node" />
+
+    <!--  坐标变换 -->
+    <node pkg="tf" type="static_transform_publisher" name="world_to_cam" 
+          args="0 0 0.5 0 1.57 0 world image_raw 10" />
+        
+    <arg name="marker_size" default="5" />
+    <arg name="max_new_marker_error" default="0.08" />
+    <arg name="max_track_error" default="0.2" />
+    <arg name="cam_image_topic" default="/image_raw" />
+    <arg name="cam_info_topic" default="/camera_info" />
+    <arg name="output_frame" default="/image_raw" />
+ 
+        <!--   启动二维码识别的功能节点   -->       
+    <node name="ar_track_alvar" pkg="ar_track_alvar" type="individualMarkersNoKinect" respawn="false" output="screen">   
+        <param name="marker_size"           type="double" value="$(arg marker_size)" />
+        <param name="max_new_marker_error"  type="double" value="$(arg max_new_marker_error)" />
+        <param name="max_track_error"       type="double" value="$(arg max_track_error)" />
+        <param name="output_frame"          type="string" value="$(arg output_frame)" />
+
+        <!-- 输入图像数据和摄像头信息  -->
+        <remap from="camera_image"  to="$(arg cam_image_topic)" />
+        <remap from="camera_info"   to="$(arg cam_info_topic)" />    <!--  标定文件已经加入camera_info  -->
+    </node>
+
+    <!-- rviz view /-->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find vision_detector)/config/ar_track_camera.rviz"/>
+
+</launch>

@@ -1,0 +1,14 @@
+<launch>
+    <!-- 启动相机节点  -->
+    <node name="libuvc_camera" pkg="libuvc_camera" type="camera_node" />
+
+    <node pkg="ros_tensorflow" name="ros_tensorflow" type="image_recognition.py" output="screen"> 
+    <remap from="image" to="/image_raw" />  
+  </node>
+
+    <node pkg="rostopic" name="rostopic_echo" type="rostopic" args="echo /result" />
+
+    <!-- 启动订阅cv_bridge_image话题  -->
+    <node name="rqt_image_view" pkg="rqt_image_view" type="rqt_image_view" args="/image_raw"/>
+
+</launch>

@@ -1,0 +1,23 @@
+<launch>
+
+    <!-- 启动相机节点  -->
+    <node name="libuvc_camera" pkg="libuvc_camera" type="camera_node" />
+
+    <!-- 启动笑脸识别节点  -->
+    <node pkg="vision_detector" name="astra_smile" type="astra_smile.py" output="screen">
+        
+        <remap from="input_rgb_image" to="/image_raw" />      
+        <rosparam>
+            haar_scaleFactor: 1.2
+            haar_minNeighbors: 2
+            haar_minSize: 40
+            haar_maxSize: 60
+        </rosparam>
+        <param name="faceCascade" value="$(find vision_detector)/data/haar_detectors/lbpcascade_frontalface.xml" />
+        <param name="smileCascade" value="$(find vision_detector)/data/haar_detectors/haarcascade_smile.xml" />
+    </node>
+
+    <!-- 启动订阅cv_bridge_image话题  -->
+    <node name="rqt_image_view" pkg="rqt_image_view" type="rqt_image_view" args="/cv_bridge_image"/>
+
+</launch>

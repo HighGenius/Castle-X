@@ -1,0 +1,24 @@
+<launch>
+
+    <!-- 启动相机节点  -->
+    <node name="libuvc_camera" pkg="libuvc_camera" type="camera_node" />
+
+    <!-- 启动人眼识别节点  -->
+    <node pkg="vision_detector" name="astra_cv_close_eye_detect" type="astra_cv_close_eye_detect.py" output="screen">
+        
+        <remap from="input_rgb_image" to="/image_raw" />      
+        <rosparam>
+            scaleFactor: 1.2
+            minNeighbors: 2
+            minSize: 40
+            maxSize: 60
+        </rosparam>
+        <param name="cascade_1" value="$(find vision_detector)/data/haar_detectors/haarcascade_frontalface_alt_eye.xml" />
+        <param name="cascade_2" value="$(find vision_detector)/data/haar_detectors/haarcascade_profileface.xml" />
+        <param name="cascade_3" value="$(find vision_detector)/data/haar_detectors/haarcascade_eye_tree_eyeglasses.xml" />
+    </node>
+
+    <!-- 启动订阅cv_bridge_image话题  -->
+    <node name="rqt_image_view" pkg="rqt_image_view" type="rqt_image_view" args="/cv_bridge_image"/>
+
+</launch>

@@ -1,0 +1,19 @@
+<launch>
+
+  <!--  启动机器人  -->
+  <include file="$(find turtlebot_bringup)/launch/minimal.launch" />
+
+  <!-- Define laser type-->
+  <arg name="laser_type" default="rplidar" />
+
+  <!-- laser driver -->
+  <include file="$(find turtlebot_navigation)/laser/driver/$(arg laser_type)_laser.launch" />
+
+  <!--  启动gmapping参数设置  -->
+  <include file="$(find turtlebot_navigation)/launch/includes/gmapping.launch.xml"/>
+
+  <!--  启动move-base  -->
+  <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/>
+
+  
+</launch>
